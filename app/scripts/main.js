@@ -59,19 +59,37 @@ require.config({
 });
 (function () {
     'use strict';
+
+    function getDocHeight() {
+        var D = document;
+        return Math.max(
+            D.body.scrollHeight, D.documentElement.scrollHeight,
+            D.body.offsetHeight, D.documentElement.offsetHeight,
+            D.body.clientHeight, D.documentElement.clientHeight
+        );
+    }
+
     require(['scene', 'requestAnimSingleton'], function (render ,AnimRequest) {
         render.renderer.autoClear = false;
-        var cube = new THREE.Mesh( new THREE.CubeGeometry( 200, 200, 200 ), new THREE.MeshLambertMaterial({color: 0xff0000}) );
-        render.scene.add(cube);
-        cube.rotation.x = -0.2;
-        cube.rotation.y = 2;
+        var cubes = [];
+        for (var i = 0; i < 100; i++) {
+            cubes[i] = new THREE.Mesh( new THREE.CubeGeometry(15, 15, 15 ), new THREE.MeshLambertMaterial({color: 0xff0000}) );
+            cubes[i].position.y = -1 * getDocHeight()*Math.random() + 200;
+            cubes[i].position.z = -Math.random() * 1000;
+            cubes[i].position.x = (Math.random() - 0.5) * 2 * cubes[i].position.z;
+            render.scene.add(cubes[i]);
+        }
 
         var doer = new AnimRequest('renderloop', function () {
             render.renderer.render(render.scene, render.camera);
-            cube.rotation.y += 0.1;
         });
         doer.start();
         $('body').append(render.renderer.domElement);
+        $(window).on('scroll', function () {
+            doer.once('scroll', function () {
+                render.camera.position.y = -window.scrollY/10;
+            });
+        });
         render.renderer.domElement.classList.add('background');
     });
 })();
