@@ -3,7 +3,7 @@ define(['three'], function() {
     'use strict';
 
     var scene = new THREE.Scene();
-    var WIDTH = 480;
+    var WIDTH = Math.min(document.documentElement.clientWidth, 480);
     var HEIGHT = WIDTH * document.documentElement.clientHeight / document.documentElement.clientWidth;
     var VIEW_ANGLE = 45;
     var ASPECT = WIDTH / HEIGHT;

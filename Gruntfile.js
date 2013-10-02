@@ -161,6 +161,7 @@ module.exports = function (grunt) {
                     // required to support SourceMaps
                     // http://requirejs.org/docs/errors.html#sourcemapcomments
                     preserveLicenseComments: false,
+                    findNestedDependencies: true,
                     useStrict: true,
                     wrap: true
                     //uglify2: {} // https://github.com/mishoo/UglifyJS2
@@ -343,7 +344,6 @@ module.exports = function (grunt) {
         'uglify',
         'modernizr',
         'copy:dist',
-        'rev',
         'usemin'
     ]);
 
