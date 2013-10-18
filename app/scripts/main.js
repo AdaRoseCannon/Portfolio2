@@ -82,24 +82,35 @@ function isScrolledIntoView(elem)
             if(title) {
                 var key = title.replace(/[^a-zA-Z0-9-]/ig,'').toLowerCase();
                 b.id = key;
-                console.log(key);
                 var newLink = $('<li><a href="#' + key + '">' + title + '</a></li>');
                 newLink.find('a').on('click', function (e) {
                     e.preventDefault();
                     var $anchor = $(this);
                     $('html, body').stop().animate({
                         scrollTop: $($anchor.attr('href')).offset().top
-                    }, 1500,'easeOutExpo');
+                    }, 3000,'easeOutExpo');
                 })
                 $('#insertNavHere').append(newLink);
             }
         });
         $('body').scrollspy();
         var doer = new AnimRequest();
+        $(window).bind('mousewheel', function () {
+            $('html, body').stop();
+        });
         $(window).on('scroll', function () {
             doer.once('scroll', function () {
 
             });
+        });
+        require(['bg1'], function (renderer) {
+            $('.page1').append(renderer.domElement);
+            renderer.domElement.classList.add('background');
+            var doer = new AnimRequest('bg1', function () {
+                renderer.render(renderer.scene, renderer.camera);
+                renderer.sceneObjects.cube.rotation.y+=0.1;
+            });
+            doer.start();
         });
     });
 })();
