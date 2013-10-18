@@ -3,6 +3,7 @@
 require.config({
     paths: {
         jquery: '../bower_components/jquery/jquery',
+        jqueryeasing: '../bower_components/jquery.easing/js/jquery.easing',
         three: '../bower_components/threejs/build/three',
         chroma: '../bower_components/chroma-js/chroma',
         bootstrapAffix: '../bower_components/sass-bootstrap/js/affix',
@@ -57,39 +58,48 @@ require.config({
         }
     }
 });
+
+function isScrolledIntoView(elem)
+{
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
 (function () {
     'use strict';
 
-    function getDocHeight() {
-        var D = document;
-        return Math.max(
-            D.body.scrollHeight, D.documentElement.scrollHeight,
-            D.body.offsetHeight, D.documentElement.offsetHeight,
-            D.body.clientHeight, D.documentElement.clientHeight
-        );
-    }
-
-    require(['scene', 'requestAnimSingleton'], function (render ,AnimRequest) {
-        render.renderer.autoClear = false;
-        var cubes = [];
-        for (var i = 0; i < 100; i++) {
-            cubes[i] = new THREE.Mesh( new THREE.CubeGeometry(15, 15, 15 ), new THREE.MeshLambertMaterial({color: 0xff0000}) );
-            cubes[i].position.y = -1 * getDocHeight()*Math.random() + 200;
-            cubes[i].position.z = -Math.random() * 1000;
-            cubes[i].position.x = (Math.random() - 0.5) * 2 * cubes[i].position.z;
-            render.scene.add(cubes[i]);
-        }
-
-        var doer = new AnimRequest('renderloop', function () {
-            render.renderer.render(render.scene, render.camera);
+    require(['jquery','jqueryeasing', 'requestAnimSingleton', 'bootstrapScrollspy'], function ($, easings, AnimRequest, scrollspy) {
+        $('.page').css({
+            'padding-top': $('#myNav').height()
         });
-        doer.start();
-        $('body').append(render.renderer.domElement);
+        $('.page').each(function (a,b) {
+            var title = b.dataset.pagetitle;
+            if(title) {
+                var key = title.replace(/[^a-zA-Z0-9-]/ig,'').toLowerCase();
+                b.id = key;
+                console.log(key);
+                var newLink = $('<li><a href="#' + key + '">' + title + '</a></li>');
+                newLink.find('a').on('click', function (e) {
+                    e.preventDefault();
+                    var $anchor = $(this);
+                    $('html, body').stop().animate({
+                        scrollTop: $($anchor.attr('href')).offset().top
+                    }, 1500,'easeOutExpo');
+                })
+                $('#insertNavHere').append(newLink);
+            }
+        });
+        $('body').scrollspy();
+        var doer = new AnimRequest();
         $(window).on('scroll', function () {
             doer.once('scroll', function () {
-                render.camera.position.y = -window.scrollY/10;
+
             });
         });
-        render.renderer.domElement.classList.add('background');
     });
 })();

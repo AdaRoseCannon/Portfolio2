@@ -15,37 +15,56 @@
         <!-- endbuild -->
         <!-- build:js scripts/vendor/modernizr.js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
+        <script src="scripts/libs/cannonjs/build/cannon.js"></script>
         <!-- endbuild -->
     </head>
-    <body>
+    <body data-spy="scroll" data-target="#myNav">
         <!--[if lt IE 10]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div class="page">
-            <div class="container">
-                <div class="header">
-                    <ul class="nav nav-pills pull-right">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                    <h3 class="text-muted">portfolio2</h3>
-                </div>
+        <nav class="navbar navbar-default navbar-fixed-top" id="myNav" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Ada Rose Edwards</a>
+            </div>
 
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav" id="insertNavHere">
+                </ul>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        <div class="page" data-pagetitle="Intro">
+            <div class="container">
                 <div class="jumbotron">
                     <h1>'Allo, 'Allo!</h1>
                     <p class="lead">Always a pleasure scaffolding your apps.</p>
                     <p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p>
                 </div>
 
-                <div class="footer">
-                    <p>♥ from the Yeoman team</p>
-                </div>
-
             </div>
         </div>
-        <div class="page">
+        <div class="page"  data-pagetitle="Contact">
             <h1>Page 2</h1>
+        </div>
+        <div class="page pageFooter">
+            <div class="container">
+                <div class="footer">
+                    <p>♥ from Ada</p>
+                </div>
+            </div>
         </div>
 
         <!-- build:js scripts/vendor.js -->

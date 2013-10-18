@@ -2,11 +2,29 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 
 @import 'sass-bootstrap/lib/bootstrap';
 
-html, body, body > div.page {
+html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding:0;
+}
+
+body > div.page {
+    width: 100%;
+    min-height:100%;
+    margin: 0;
+    padding:0;
+    position:relative;
+    z-index: 100;
+}
+
+body > div.page:before {
+    position:absolute;
+    top:-5em;
+    height: -5em;
+    background: grey;
+    padding: 1em;
+    content: 'Next Page';
 }
 
 canvas.background {
@@ -18,8 +36,27 @@ canvas.background {
     z-index: -1;
 }
 
+canvas.foreground {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index: 10000;
+}
+
 div.page {
     overflow: hidden;
+}
+
+div.page.pageFooter {
+    min-height:5em;
+    font-size: 150%;
+    box-shadow: inset 0px 10px 20px rgba(0,0,0,0.4); 
+    background: url('/images/navy_blue.png') fixed;
+    color:rgb(128,128,128);
+    overflow: hidden;
+    z-index: -1;
 }
 
 .browsehappy {
@@ -48,6 +85,7 @@ div.page {
     margin-bottom: 0;
     line-height: 40px;
     padding-bottom: 19px;
+    position:fixed;
 }
 
 /* Custom page footer */
@@ -85,13 +123,6 @@ div.page {
 
 .marketing p + h4 {
     margin-top: 28px;
-}
-
-div.footer {
-    position: absolute;
-    bottom: 0;
-    width:96%;
-    left: 2%;
 }
 
 /* Responsive: Portrait tablets and up */

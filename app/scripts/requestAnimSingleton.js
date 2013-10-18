@@ -2,12 +2,12 @@
 define([], function () {
 	'use strict';
 	function AnimRequest(id, taskIn) {
-		if (id === undefined || (typeof id) === 'function') {
+		if ((typeof id) === 'function') {
 			console.error('No id defined for AnimRequest');
 			return;
 		}
 		if (AnimRequest.prototype._singletonInstance) {
-			AnimRequest.prototype._singletonInstance.push(id, taskIn);
+			if (taskIn !== undefined) AnimRequest.prototype._singletonInstance.push(id, taskIn);
 			return AnimRequest.prototype._singletonInstance;
 		}
 		AnimRequest.prototype._singletonInstance = this;
@@ -29,6 +29,9 @@ define([], function () {
 
 		this.once = function (id, taskIn) {
 			taskOnce[id] = taskIn;
+			if(!doing) {
+				requestAnimFrame(doThing);
+			}
 		};
 
 		this.stop = function () {
@@ -38,7 +41,7 @@ define([], function () {
 		this.push = function (id, taskIn) {
 			tasks[id] = taskIn;
 		};
-		this.push(id, taskIn);
+		if (taskIn !== undefined) this.push(id, taskIn);
 
 		var doThing = function () {
 			for (var task in tasks){
