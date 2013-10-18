@@ -91,6 +91,8 @@ define(['three', 'doob-perlin'], function (three, Perlin) {
         for(var v in sea.vertices) {
         	sea.vertices[v].y = 20*scale*getPerlin({x: sea.vertices[v].x, y: sea.vertices[v].z, z: z}, -1, 1, scale);
         }
+		sea.computeVertexNormals();
+		sea.computeFaceNormals();
         sea.verticesNeedUpdate = true;
         sea.normalsNeedUpdate = true;
         sea.tangentsNeedUpdate = true;
