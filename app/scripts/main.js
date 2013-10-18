@@ -109,6 +109,7 @@ function isScrolledIntoView(elem)
             var doer = new AnimRequest('bg1', function () {
                 renderer.render(renderer.scene, renderer.camera);
                 renderer.sceneObjects.cube.rotation.y+=0.1;
+                renderer.runme();
             });
             doer.start();
         });
