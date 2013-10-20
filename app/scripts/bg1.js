@@ -27,7 +27,7 @@ define(['three', 'doob-perlin'], function (three, Perlin) {
     var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(WIDTH, HEIGHT);
-    camera.position = {x:0, y:200, z:800};
+    camera.position = {x:0, y:200, z:1300};
     camera.lookAt({x: 0, y: 0, z: 0});
 
     function addObject(obj) {
@@ -39,21 +39,21 @@ define(['three', 'doob-perlin'], function (three, Perlin) {
         }
     }
     var pointLight = new THREE.PointLight(0xFFFFFF);
-    pointLight.position = {x: 500, y: 500, z: 530};
+    pointLight.position = {x: 500, y: 500, z: 5030};
 
     var cube = new THREE.Mesh( new THREE.CubeGeometry( 100, 100, 100 ), new THREE.MeshNormalMaterial({color: 0xff0000}) );
     cube.position = {x: 0, y: 0, z: 0};
 
     var sea = new THREE.Geometry();
     var vertices = [];
-    var nX = 100, nY = 50;
-    var scale = 30;
+    var nX = 75, nY = 30;
+    var scale = 50;
     for (var x=0;x<nX;x++){
     	vertices [x] = [];
     	var h = Math.sqrt(3)/2;
 	    for (var y=0;y<nY;y++){
-	    	var xD = (x - nX/2)*scale + scale*(0.5+0.5*(y%2));
 	    	var zD = h*(y - nY/2)*scale;
+	    	var xD = (x - nX/2)*scale*(300+(zD/5))/300 + scale*(0.5+0.5*(y%2));
 	    	var yD = 20*scale*getPerlin({x: xD, y: zD, z: 0}, -1, 1, scale);
 	    	vertices[x][y] = sea.vertices.push(new THREE.Vector3(xD, yD, zD)) - 1;
 	    }
@@ -84,7 +84,10 @@ define(['three', 'doob-perlin'], function (three, Perlin) {
     renderer.camera = camera;
     renderer.sceneObjects = sceneObjects;
     var z=0;
+    var oldT;
     renderer.runme = function () {
+    	//console.log(Math.floor(1000/(Date.now()-oldT)));
+    	oldT = Date.now();
         renderer.render(renderer.scene, renderer.camera);
         renderer.sceneObjects.cube.rotation.y+=0.01;
         z+=1;
@@ -95,7 +98,6 @@ define(['three', 'doob-perlin'], function (three, Perlin) {
 		sea.computeFaceNormals();
         sea.verticesNeedUpdate = true;
         sea.normalsNeedUpdate = true;
-        sea.tangentsNeedUpdate = true;
     }
     console.log(sea);
    	return renderer;
