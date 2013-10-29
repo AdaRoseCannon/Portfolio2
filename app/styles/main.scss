@@ -60,6 +60,11 @@ div.page.pageFooter {
     z-index: -1;
 }
 
+.navbar-brand {
+    font-family: 'Advent Pro';
+    font-weight: 200;
+}
+
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
@@ -147,4 +152,24 @@ div.page.pageFooter {
     .jumbotron {
         border-bottom: 0;
     }
+}
+
+.page1 .portrait {
+    border-radius: 50%;
+    width:0;
+    height:0;
+    padding: calc(100px + 10%);
+    background: url('/images/me.jpeg');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    margin:auto;
+    top: 55px; left: 0px; bottom: 0px; right: 0px;
+    -webkit-transition: all 2s;
+    transition: all 2s;
+}
+
+.page1.active .portrait {
+    left:calc(90% - 100px);
+
 }

@@ -73,7 +73,11 @@ function isScrolledIntoView(elem)
 (function () {
     'use strict';
 
-    require(['jquery','jqueryeasing', 'requestAnimSingleton', 'bootstrapScrollspy'], function ($, easings, AnimRequest, scrollspy) {
+    require(['jquery','jqueryeasing', 'requestAnimSingleton', 'bootstrapScrollspy', 'bootstrapCollapse'], function ($, easings, AnimRequest, scrollspy, bootstrapCollapse) {
+
+        var lastScroll = 0;
+        var tops = [];
+        var timeOuts = [];
         $('.page').css({
             'padding-top': $('#myNav').height()
         });
@@ -83,26 +87,57 @@ function isScrolledIntoView(elem)
                 var key = title.replace(/[^a-zA-Z0-9-]/ig,'').toLowerCase();
                 b.id = key;
                 var newLink = $('<li><a href="#' + key + '">' + title + '</a></li>');
-                newLink.find('a').on('click', function (e) {
-                    e.preventDefault();
-                    var $anchor = $(this);
-                    $('html, body').stop().animate({
-                        scrollTop: $($anchor.attr('href')).offset().top
-                    }, 3000,'easeOutExpo');
-                })
                 $('#insertNavHere').append(newLink);
             }
         });
-        $('body').scrollspy();
+        $('.navbar-collapse a, .navbar-nav a').on('click', function (e) {
+            e.preventDefault();
+            var $anchor = $(this).attr('href');
+            $('html, body').stop().animate({
+                scrollTop: $($anchor).offset().top
+            }, 3000,'easeOutExpo');
+        });
+
         var doer = new AnimRequest();
         $(window).bind('mousewheel', function () {
             $('html, body').stop();
         });
-        $(window).on('scroll', function () {
-            doer.once('scroll', function () {
-
+        $( window ).resize(function() {
+            doer.once('resize', function () {
+                tops = [];
+                $('[data-spy="scroll"]').each(function () {
+                    var $spy = $(this).scrollspy('refresh')
+                });
+                $(window).scroll();
             });
         });
+
+        doer.once('firstFrame', function () {
+            $(window).scroll();
+        })
+
+        $(window).on('scroll', function () {
+            doer.once('scroll', function () {
+                window.clearTimeout(timeOuts[0])
+                timeOuts[0] = window.setTimeout(function () {
+                    var pos = $(window).scrollTop();
+                    if (tops.length === 0) {
+                        $('.page').each(function (a,b) {
+                            tops[a] = {el: b, top: $(b).offset().top};
+                        });
+                    }
+                    var t = tops.map(function (a) {return {el: a.el, top: Math.abs(pos - a.top)}}).sort(function (a, b) {return (a.top - b.top)});
+                    for(var e in t) {
+                        t[e].el.classList.remove('active');
+                    }
+                    t[0].el.classList.add('active');
+                    $('html, body').stop().animate({
+                        scrollTop: $(t[0].el).offset().top
+                    }, 1000,'easeOutExpo');
+                }, 500);
+            });
+        });
+        /*
         require(['bg1'], function (renderer) {
             $('.page1').append(renderer.domElement);
             renderer.domElement.classList.add('background');
@@ -113,5 +148,6 @@ function isScrolledIntoView(elem)
             });
             doer.start();
         });
+        */
     });
 })();
