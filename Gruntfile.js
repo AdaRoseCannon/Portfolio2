@@ -8,6 +8,7 @@
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
     // show elapsed time at the end
     require('time-grunt')(grunt);
     // load all grunt tasks
@@ -20,6 +21,12 @@ module.exports = function (grunt) {
             dist: 'dist'
         },
         watch: {
+			handlebars: {
+				files: [
+					'<%= yeoman.app %>/templates/*.hbs'
+				],
+				tasks: ['handlebars', 'handlebars reload']
+			},
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass:server', 'autoprefixer']
@@ -285,6 +292,15 @@ module.exports = function (grunt) {
             ],
             uglify: true
         },
+        handlebars: {
+            compile: {
+                files: {
+                    '<%= yeoman.app %>/temp/compiled-templates.js': [
+                        '<%= yeoman.app %>/templates/*.hbs'
+                    ]
+                }
+            }
+        },
         concurrent: {
             server: [
                 'compass',
@@ -338,6 +354,7 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
+        //'handlebars',
         'requirejs',
         'concat',
         'cssmin',
@@ -352,4 +369,5 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
+
 };

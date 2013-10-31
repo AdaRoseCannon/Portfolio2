@@ -1,3 +1,11 @@
+@import "compass/css3/images";
+
+$hue:190;
+
+.page1 {
+    background: radial-gradient(hsl($hue,50,60), hsl($hue,50,50) 50%);
+    background-position: center bottom;
+}
 
 .page1 .portrait {
     border-radius: 50%;
