@@ -2,9 +2,23 @@
 
 $hue:190;
 
+@keyframes fadeIn
+{
+    0% {opacity: 0;}
+    75% {opacity: 0;}
+    100% {opacity: 100;}
+}
+
 .page1 {
     background: radial-gradient(hsl($hue,50,60), hsl($hue,50,50) 50%);
     background-position: center bottom;
+    height: 100%;
+    overflow: hidden;
+}
+
+.fadeIn {
+    animation-play-state: paused;
+    animation: fadeIn 2.5s;
 }
 
 .page1 .portrait {
@@ -15,13 +29,22 @@ $hue:190;
     background: url('/images/me.jpeg');
     background-size: cover;
     background-position: center;
-    position: absolute;
-    margin:auto;
-    top: 55px; left: 0px; bottom: 0px; right: 0px;
+    float: right;
+    clear: right;
+    position: relative;
+    margin-top: 20%;
+    margin-right: calc(40% - 100px);
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
     -webkit-transition: all 2s;
     transition: all 2s;
 }
 
 .page1.active .portrait {
-    left:calc(90% - 100px);
+    margin-right:calc(-100px - 20%);
+}
+
+.page1.active .fadeIn {
+    animation-play-state: running;
 }
