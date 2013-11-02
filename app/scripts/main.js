@@ -61,114 +61,93 @@ require.config({
 
 (function () {
     'use strict';
-
-    require(['jquery','jqueryeasing', 'requestAnimSingleton', 'bootstrapScrollspy', 'bootstrapCollapse'], function ($, easings, AnimRequest, scrollspy, bootstrapCollapse) {
-
-        var lastScroll = 0;
-        var tops = [];
-        var timeOuts = [];
-
+    require(['jquery'],function ($) {
         $('.page').css({
             'padding-top': $('#myNav').height()
         });
-        $('.page').each(function (a,b) {
-            var title = b.dataset.pagetitle;
-            if(title) {
-                var key = title.replace(/[^a-zA-Z0-9-]/ig,'').toLowerCase();
-                b.id = key;
-                var newLink = $('<li><a href="#' + key + '">' + title + '</a></li>');
-                $('#insertNavHere').append(newLink);
-            }
-        });
-        $('.navbar-collapse a, .navbar-nav a').on('click', function (e) {
-            e.preventDefault();
-            $(".navbar-collapse").toggleClass('in collapse');
-            console.log('sending click');
-            var $anchor = $(this).attr('href');
-            $('html, body').stop().animate({
-                scrollTop: $($anchor).offset().top
-            }, 3000,'easeOutExpo');
-        });
+        require(['jqueryeasing', 'requestAnimSingleton', 'bootstrapScrollspy', 'bootstrapCollapse'], function (easings, AnimRequest, scrollspy, bootstrapCollapse) {
+            var tops = [];
+            var timeOuts = [];
+            $('.page').each(function (a,b) {
+                var title = b.dataset.pagetitle;
+                if(title) {
+                    var key = title.replace(/[^a-zA-Z0-9-]/ig,'').toLowerCase();
+                    b.id = key;
+                    var newLink = $('<li><a href="#' + key + '">' + title + '</a></li>');
+                    $('#insertNavHere').append(newLink);
+                }
+            });
+            $('.navbar-collapse a, .navbar-nav a').on('click', function (e) {
+                e.preventDefault();
+                $('.navbar-collapse').toggleClass('in collapse');
+                console.log('sending click');
+                var $anchor = $(this).attr('href');
+                $('html, body').stop().animate({
+                    scrollTop: $($anchor).offset().top
+                }, 3000,'easeOutExpo');
+            });
 
-        var doer = new AnimRequest();
-        $(window).bind('mousewheel', function () {
-            $('html, body').stop();
-        });
-        $( window ).resize(function() {
-            doer.once('resize', function () {
-                tops = [];
-                $('[data-spy="scroll"]').each(function () {
-                    var $spy = $(this).scrollspy('refresh')
+            var doer = new AnimRequest();
+            $(window).bind('mousewheel', function () {
+                $('html, body').stop();
+            });
+            $( window ).resize(function() {
+                doer.once('resize', function () {
+                    tops = [];
+                    $('[data-spy="scroll"]').each(function () {
+                        $(this).scrollspy('refresh');
+                    });
+                    $(window).scroll();
                 });
+            });
+
+            doer.once('firstFrame', function () {
                 $(window).scroll();
             });
-        });
 
-        doer.once('firstFrame', function () {
-            $(window).scroll();
-        });
-
-        $(window).on('scroll', function () {
-            doer.once('scroll', function () {
-                window.clearTimeout(timeOuts[0]);
-                timeOuts[0] = window.setTimeout(function () {
-                    var pos = $(window).scrollTop();
-                    if (tops.length === 0) {
-                        $('.page').each(function (a,b) {
-                            tops[a] = {el: b, top: $(b).offset().top};
-                        });
-                    }
-                    var t = tops.map(function (a) {return {el: a.el, top: Math.abs(pos - a.top)};}).sort(function (a, b) {return (a.top - b.top);});
-                    for(var e in t) {
-                        t[e].el.classList.remove('active');
-                    }
-                    t[0].el.classList.add('active');
-                    var nextTop = $(t[0].el).offset().top;
-                    if (Math.abs(nextTop - pos) > 30) {
-                        $('html, body').stop().animate({
-                            scrollTop: nextTop
-                        }, 1000,'easeOutExpo');
-                    }
-                }, 500);
+            $(window).on('scroll', function () {
+                doer.once('scroll', function () {
+                    window.clearTimeout(timeOuts[0]);
+                    timeOuts[0] = window.setTimeout(function () {
+                        var pos = $(window).scrollTop();
+                        if (tops.length === 0) {
+                            $('.page').each(function (a,b) {
+                                tops[a] = {el: b, top: $(b).offset().top};
+                            });
+                        }
+                        var t = tops.map(function (a) {return {el: a.el, top: Math.abs(pos - a.top)};}).sort(function (a, b) {return (a.top - b.top);});
+                        for(var e in t) {
+                            t[e].el.classList.remove('active');
+                        }
+                        t[0].el.classList.add('active');
+                        var nextTop = $(t[0].el).offset().top;
+                        if (Math.abs(nextTop - pos) > 30) {
+                            $('html, body').stop().animate({
+                                scrollTop: nextTop
+                            }, 1000,'easeOutExpo');
+                        }
+                    }, 500);
+                });
             });
+
+            var topicBox = $('.topicBox');
+            var topicBalls = [];
+            $.get('http://api.klout.com/v2/user.json/26458652576095451/topics?key=27vfh8jqjqsga2tqyztgwvm4', function (data) {
+                data.forEach(function (d, i) {
+                    var newTopic = document.createElement('div');
+                    newTopic.innerHTML = '<p>' + d.displayName + '</p>';
+                    newTopic.style.height = newTopic.style.width = ((20 + (data.length-i-1)*3)*6)+'px';
+                    newTopic.classList.add('topicBall');
+                    topicBalls.push(newTopic);
+                });
+                topicBox.append(topicBalls.sort(function () {
+                    return Math.random() - 0.5;
+                }));
+                new Masonry( topicBox.get(0) , {
+                    itemSelector: '.topicBall',
+                    columnWidth: 10
+                });
+            }, 'jsonp');
         });
-
-
-        //populate klout
-        //my id is 26458652576095451
-        //key=27vfh8jqjqsga2tqyztgwvm4
-        var topicBox = $('.topicBox');
-        var topicBalls = [];
-        $.get('http://api.klout.com/v2/user.json/26458652576095451/topics?key=27vfh8jqjqsga2tqyztgwvm4', function (data) {
-            data.forEach(function (d, i) {
-                var newTopic = document.createElement('div');
-                newTopic.innerHTML = '<p>' + d.displayName + '</p>';
-                newTopic.style.height = newTopic.style.width = ((20 + (data.length-i-1)*3)*6)+'px';
-                newTopic.style.background='blue';//'url(\'' + d.imageUrl + '\')';
-                newTopic.classList.add('topicBall');
-                topicBalls.push(newTopic);
-            });
-            topicBox.append(topicBalls.sort(function () {
-                return Math.random() - 0.5;
-            }));
-            var container = document.querySelector('#container');
-            var msnry = new Masonry( topicBox.get(0) , {
-                itemSelector: '.topicBall',
-                columnWidth: 10
-            });
-        }, 'jsonp');
-
-        /*
-        require(['bg1'], function (renderer) {
-            $('.page1').append(renderer.domElement);
-            renderer.domElement.classList.add('background');
-            var doer = new AnimRequest('bg1', function () {
-                renderer.render(renderer.scene, renderer.camera);
-                renderer.sceneObjects.cube.rotation.y+=0.1;
-                renderer.runme();
-            });
-            doer.start();
-        });
-        */
     });
 })();

@@ -90,7 +90,7 @@ div.page.pageFooter {
     position:fixed;
 }
 .large-text {
-    font-size: 3em;
+    font-size: 2.5em;
     font-family: 'Advent Pro';
 }
 
@@ -163,5 +163,8 @@ div.page.pageFooter {
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {
         border-bottom: 0;
+    }
+    .large-text {
+        font-size: 3em;
     }
 }

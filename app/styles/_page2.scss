@@ -7,4 +7,36 @@
     background-position: center bottom;
     height: 100%;
     overflow: hidden;
+
+	div.col-xs-12 {
+		font-family: 'Advent Pro';
+		font-size: 2em;
+		padding-left: 2em;
+		padding-bottom: 0.5em;
+	}
+
+	div.cat {
+		padding-bottom: 0em;
+		padding-left: 1em;
+	}
+
+	a:link {color:hsl($myHue,50,90)}
+	a:visited {color:hsl($myHue,50,80)}
+	a:hover {color:hsl($myHue,50,95)}
+	a:active {color:hsl($myHue,50,90)}
+
+	/* Responsive: Portrait tablets and up */
+	@media screen and (min-width: 768px) {
+		div.col-xs-12 {
+			padding: 0 0 0 0.2em;
+			font-size: 3em;
+		}
+		div.cat {
+			text-align: right;
+		}
+		div.cat:after {
+			content: "|";
+			padding: 0 0 0 0.2em;
+		}
+	}
 }

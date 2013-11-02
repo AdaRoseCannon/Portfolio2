@@ -5,13 +5,15 @@
     background-position: center bottom;
     color: hsl($myHue,50,95);
     text-shadow: 0 0 10px hsl($myHue,50,40);
-    height: 100%;
     overflow: hidden;
 
     .topicBall {
     	text-align: center;
 		vertical-align: middle;
     	border-radius: 50%;
+        color: hsl($hue,50,95);
+        background-color: hsl($hue,50,50);
+        text-shadow: 0 0 10px hsl($hue,50,40);
         background-position: center;
         background-repeat:no-repeat;
         margin: 0.5em;
@@ -21,9 +23,9 @@
         display: table;
 
         p {
-            display: table-cell; 
-            vertical-align: middle; 
-            text-align: center; 
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
         }
     }
 }
