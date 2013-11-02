@@ -1,0 +1,11 @@
+
+
+.page6 {
+	$myHue:$hue+$hue_offset*5;
+    background: radial-gradient(hsl($myHue,50,60), hsl($myHue,50,50) 50%);
+    background-position: center bottom;
+    color: hsl($myHue,50,95);
+    text-shadow: 0 0 10px hsl($myHue,50,40);
+    height: 100%;
+    overflow: hidden;
+}
