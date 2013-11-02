@@ -29,10 +29,11 @@ $hue:190;
     background: url('/images/me.jpeg');
     background-size: cover;
     background-position: center;
+    background-repeat:no-repeat;
     float: right;
     clear: right;
     position: relative;
-    margin-top: 20%;
+    margin-top: 10%;
     margin-right: calc(40% - 100px);
     left: 0px;
     bottom: 0px;
@@ -42,7 +43,8 @@ $hue:190;
 }
 
 .page1.active .portrait {
-    margin-right:calc(-100px - 20%);
+    margin-top: 10%;
+    margin-right:calc(-100px - 10%);
 }
 
 .page1.active .fadeIn {

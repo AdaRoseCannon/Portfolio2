@@ -3,9 +3,12 @@
 $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 
 $theme_hue:190;
+$hue_offset:40;
 
 @import 'bodystyle';
 @import 'page1';
 @import 'page2';
 @import 'page3';
 @import 'page4';
+@import 'page5';
+@import 'page6';

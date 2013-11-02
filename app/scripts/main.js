@@ -1,4 +1,4 @@
-/* global THREE */
+/* global Masonry*/
 
 require.config({
     paths: {
@@ -59,17 +59,6 @@ require.config({
     }
 });
 
-function isScrolledIntoView(elem)
-{
-    var docViewTop = $(window).scrollTop();
-    var docViewBottom = docViewTop + $(window).height();
-
-    var elemTop = $(elem).offset().top;
-    var elemBottom = elemTop + $(elem).height();
-
-    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-}
-
 (function () {
     'use strict';
 
@@ -78,6 +67,7 @@ function isScrolledIntoView(elem)
         var lastScroll = 0;
         var tops = [];
         var timeOuts = [];
+
         $('.page').css({
             'padding-top': $('#myNav').height()
         });
@@ -92,6 +82,8 @@ function isScrolledIntoView(elem)
         });
         $('.navbar-collapse a, .navbar-nav a').on('click', function (e) {
             e.preventDefault();
+            $(".navbar-collapse").toggleClass('in collapse');
+            console.log('sending click');
             var $anchor = $(this).attr('href');
             $('html, body').stop().animate({
                 scrollTop: $($anchor).offset().top
@@ -114,11 +106,11 @@ function isScrolledIntoView(elem)
 
         doer.once('firstFrame', function () {
             $(window).scroll();
-        })
+        });
 
         $(window).on('scroll', function () {
             doer.once('scroll', function () {
-                window.clearTimeout(timeOuts[0])
+                window.clearTimeout(timeOuts[0]);
                 timeOuts[0] = window.setTimeout(function () {
                     var pos = $(window).scrollTop();
                     if (tops.length === 0) {
@@ -126,17 +118,46 @@ function isScrolledIntoView(elem)
                             tops[a] = {el: b, top: $(b).offset().top};
                         });
                     }
-                    var t = tops.map(function (a) {return {el: a.el, top: Math.abs(pos - a.top)}}).sort(function (a, b) {return (a.top - b.top)});
+                    var t = tops.map(function (a) {return {el: a.el, top: Math.abs(pos - a.top)};}).sort(function (a, b) {return (a.top - b.top);});
                     for(var e in t) {
                         t[e].el.classList.remove('active');
                     }
                     t[0].el.classList.add('active');
-                    $('html, body').stop().animate({
-                        scrollTop: $(t[0].el).offset().top
-                    }, 1000,'easeOutExpo');
+                    var nextTop = $(t[0].el).offset().top;
+                    if (Math.abs(nextTop - pos) > 30) {
+                        $('html, body').stop().animate({
+                            scrollTop: nextTop
+                        }, 1000,'easeOutExpo');
+                    }
                 }, 500);
             });
         });
+
+
+        //populate klout
+        //my id is 26458652576095451
+        //key=27vfh8jqjqsga2tqyztgwvm4
+        var topicBox = $('.topicBox');
+        var topicBalls = [];
+        $.get('http://api.klout.com/v2/user.json/26458652576095451/topics?key=27vfh8jqjqsga2tqyztgwvm4', function (data) {
+            data.forEach(function (d, i) {
+                var newTopic = document.createElement('div');
+                newTopic.innerHTML = '<p>' + d.displayName + '</p>';
+                newTopic.style.height = newTopic.style.width = ((20 + (data.length-i-1)*3)*6)+'px';
+                newTopic.style.background='blue';//'url(\'' + d.imageUrl + '\')';
+                newTopic.classList.add('topicBall');
+                topicBalls.push(newTopic);
+            });
+            topicBox.append(topicBalls.sort(function () {
+                return Math.random() - 0.5;
+            }));
+            var container = document.querySelector('#container');
+            var msnry = new Masonry( topicBox.get(0) , {
+                itemSelector: '.topicBall',
+                columnWidth: 10
+            });
+        }, 'jsonp');
+
         /*
         require(['bg1'], function (renderer) {
             $('.page1').append(renderer.domElement);

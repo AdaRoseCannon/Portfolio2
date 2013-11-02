@@ -1,6 +1,9 @@
 
 .page2 {
-    background: radial-gradient(hsl($hue+20,50,60), hsl($hue+20,50,50) 50%);
+	$myHue:$hue+$hue_offset;
+    background: radial-gradient(hsl($myHue,50,60), hsl($myHue,50,50) 50%);
+    color: hsl($myHue,50,95);
+    text-shadow: 0 0 10px hsl($myHue,50,40);
     background-position: center bottom;
     height: 100%;
     overflow: hidden;
