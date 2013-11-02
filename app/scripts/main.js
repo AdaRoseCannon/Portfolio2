@@ -91,7 +91,7 @@ require.config({
             $(window).bind('mousewheel', function () {
                 $('html, body').stop();
             });
-            $( window ).resize(function() {
+            $(window).resize(function() {
                 doer.once('resize', function () {
                     tops = [];
                     $('[data-spy="scroll"]').each(function () {
@@ -143,9 +143,12 @@ require.config({
                 topicBox.append(topicBalls.sort(function () {
                     return Math.random() - 0.5;
                 }));
-                new Masonry( topicBox.get(0) , {
+                var msnry = new Masonry( topicBox.get(0) , {
                     itemSelector: '.topicBall',
                     columnWidth: 10
+                });
+                msnry.on( 'layoutComplete', function() {
+                    $(window).resize();
                 });
             }, 'jsonp');
         });
