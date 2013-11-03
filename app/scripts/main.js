@@ -126,7 +126,7 @@ require.config({
                         if (Math.abs(nextTop - pos) > 30) {
                             $('html, body').stop().animate({
                                 scrollTop: nextTop
-                            }, 1000,'easeOutExpo');
+                            }, 1000,'easeOutExpo', $(window).resize);
                         }
                     }, 500);
                 });
