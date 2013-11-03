@@ -8,4 +8,40 @@
     text-shadow: 0 0 10px hsl($myHue,50,40);
     height: 100%;
     overflow: hidden;
+
+    .eventBoxContainer {
+	    white-space: nowrap;
+	    overflow-y:auto;
+		position: absolute;
+		bottom: 1em;
+		left:5%;
+		width: 90%;
+
+	    .eventBox {
+	    	width: 300px;
+	    	overflow:hidden;
+	    	text-align: center;
+	    	display: inline-block;
+	    	margin: 0 0.5em;
+			white-space: normal;
+
+			.h1 {
+				white-space: normal;
+				position: absolute;
+				bottom: 0;
+			}
+
+	    	.eventLogo {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100px;
+				background: linear-gradient(hsl($myHue,10,20), hsl($myHue,10,10) 100%);
+    			box-shadow: 0 0 10px hsl($myHue,50,40);
+				border-radius: 0.3em;
+	    	}
+	    }
+    }
+
+
 }

@@ -118,8 +118,10 @@ require.config({
                         var t = tops.map(function (a) {return {el: a.el, top: Math.abs(pos - a.top)};}).sort(function (a, b) {return (a.top - b.top);});
                         for(var e in t) {
                             t[e].el.classList.remove('active');
+                            t[e].el.classList.add('inactive');
                         }
                         t[0].el.classList.add('active');
+                        t[0].el.classList.remove('inactive');
                         var nextTop = $(t[0].el).offset().top;
                         if (Math.abs(nextTop - pos) > 30) {
                             $('html, body').stop().animate({
@@ -135,7 +137,7 @@ require.config({
             $.get('http://api.klout.com/v2/user.json/26458652576095451/topics?key=27vfh8jqjqsga2tqyztgwvm4', function (data) {
                 data.forEach(function (d, i) {
                     var newTopic = document.createElement('div');
-                    newTopic.innerHTML = '<p>' + d.displayName + '</p>';
+                    newTopic.innerHTML = '<div class="innerTopicBall"><p>' + d.displayName + '</p></div>';
                     newTopic.style.height = newTopic.style.width = ((20 + (data.length-i-1)*3)*6)+'px';
                     newTopic.classList.add('topicBall');
                     topicBalls.push(newTopic);
